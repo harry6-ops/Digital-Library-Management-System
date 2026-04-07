@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliora - Create Account</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/security.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #2c3e50;
+            --navy-light: #34495e;
+            --blue: #4a90e2;
+            --blue-dark: #357abd;
+            --blue-light: #e3f2fd;
+            --green: #5cb85c;
+            --orange: #f39c12;
+            --red: #e74c3c;
+            --bg: #f5f7fa;
+            --white: #ffffff;
+            --text: #2c3e50;
+            --muted: #7f8c8d;
+            --border: #e1e8ed;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.18);
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* ── LAYOUT ── */
+        .page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* ── LEFT PANEL ── */
+        .left-panel {
+            background: linear-gradient(160deg, #2c3e50 0%, #1a2a3a 55%, #243447 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 52px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative rings */
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            border: 1px solid rgba(74, 144, 226, 0.1);
+            top: -110px;
+            right: -130px;
+            pointer-events: none;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 1px solid rgba(74, 144, 226, 0.07);
+            bottom: 40px;
+            left: -90px;
+            pointer-events: none;
+        }
+
+        .ring2 {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 1px solid rgba(74, 144, 226, 0.06);
+            top: 200px;
+            right: 20px;
+            pointer-events: none;
+        }
+
+        /* Floating book spines */
+        .books-art {
+            position: absolute;
+            bottom: 160px;
+            right: 52px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            opacity: 0.13;
+        }
+
+        .book-spine {
+            border-radius: 3px 0 0 3px;
+        }
+
+        .book-spine:nth-child(1) {
+            animation: float 4.0s ease-in-out infinite;
+        }
+
+        .book-spine:nth-child(2) {
+            animation: float 4.0s ease-in-out 0.5s infinite;
+        }
+
+        .book-spine:nth-child(3) {
+            animation: float 4.0s ease-in-out 1.0s infinite;
+        }
+
+        .book-spine:nth-child(4) {
+            animation: float 4.0s ease-in-out 1.5s infinite;
+        }
+
+        .book-spine:nth-child(5) {
+            animation: float 4.0s ease-in-out 2.0s infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-9px);
+            }
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeDown 0.5s ease both;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.3px;
+        }
+
+        /* Hero copy */
+        .hero-copy {
+            animation: fadeUp 0.6s ease 0.12s both;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(74, 144, 226, 0.15);
+            border: 1px solid rgba(74, 144, 226, 0.25);
+            color: #7ab8f5;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.22;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: #7ab8f5;
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.52);
+            line-height: 1.7;
+            max-width: 340px;
+        }
+
+        /* Perks list */
+        .perks-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeUp 0.6s ease 0.26s both;
+        }
+
+        .perk-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .perk-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .perk-text-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .perk-text-sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* Bottom note */
+        .bottom-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeUp 0.6s ease 0.4s both;
+        }
+
+        .note-avatar-group {
+            display: flex;
+        }
+
+        .note-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #1a2a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            margin-right: -8px;
+        }
+
+        .note-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            padding-left: 14px;
+        }
+
+        .note-text strong {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* ── RIGHT PANEL ── */
+        .right-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 52px;
+            background: var(--bg);
+            overflow-y: auto;
+        }
+
+        .form-wrap {
+            width: 100%;
+            max-width: 440px;
+            animation: fadeUp 0.6s ease 0.1s both;
+        }
+
+        .form-heading {
+            margin-bottom: 28px;
+        }
+
+        .form-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 15px;
+            color: var(--muted);
+        }
+
+        /* Message box */
+        .msg-box {
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .msg-box.error {
+            background: #ffebee;
+            color: var(--red);
+            border: 1px solid #ffcdd2;
+            display: flex;
+        }
+
+        .msg-box.success {
+            background: #e8f5e9;
+            color: var(--green);
+            border: 1px solid #c8e6c9;
+            display: flex;
+        }
+
+        /* Form card */
+        .form-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px 28px 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Name row: two fields side by side */
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 13px;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 13px 10px 38px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: #b2bec3;
+        }
+
+        .form-input:focus {
+            border-color: var(--blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        }
+
+        .input-wrap:focus-within .input-icon {
+            color: var(--blue);
+        }
+
+        .form-input.invalid {
+            border-color: var(--red);
+        }
+
+        .form-input.valid {
+            border-color: var(--green);
+        }
+
+        /* Validation icon on right */
+        .val-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .val-icon.show-ok {
+            opacity: 1;
+            color: var(--green);
+        }
+
+        .val-icon.show-err {
+            opacity: 1;
+            color: var(--red);
+        }
+
+        /* Password toggle */
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 13px;
+            background: none;
+            border: none;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .toggle-pw:hover {
+            color: var(--text);
+        }
+
+        /* Field hint */
+        .field-hint {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+            display: none;
+        }
+
+        .field-hint.show {
+            display: block;
+        }
+
+        .field-hint.err {
+            color: var(--red);
+        }
+
+        .field-hint.ok {
+            color: var(--green);
+        }
+
+        /* Password strength */
+        .strength-wrap {
+            margin-top: 6px;
+            display: none;
+        }
+
+        .strength-wrap.show {
+            display: block;
+        }
+
+        .strength-bar {
+            height: 4px;
+            border-radius: 4px;
+            background: var(--border);
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s, background 0.3s;
+            width: 0%;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Terms checkbox */
+        .terms-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 4px;
+        }
+
+        .custom-check {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border: 2px solid var(--border);
+            border-radius: 5px;
+            cursor: pointer;
+            appearance: none;
+            background: white;
+            transition: all 0.2s;
+            position: relative;
+            margin-top: 1px;
+        }
+
+        .custom-check:checked {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .custom-check:checked::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 5px;
+            height: 9px;
+            border: 2px solid white;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg);
+        }
+
+        .terms-label {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .terms-label a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-label a:hover {
+            color: var(--blue-dark);
+        }
+
+        /* Submit */
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(74, 144, 226, 0.4);
+            margin-bottom: 18px;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-submit:hover {
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit.loading {
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .btn-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        .btn-submit.loading .btn-spinner {
+            display: block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        /* Social */
+        .social-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .btn-social {
+            padding: 9px 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.2s;
+        }
+
+        .btn-social:hover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        /* Sign in link */
+        .signin-row {
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .signin-link {
+            color: var(--blue);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .signin-link:hover {
+            color: var(--blue-dark);
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                padding: 32px 28px 36px;
+                min-height: auto;
+            }
+
+            .books-art {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 30px;
+            }
+
+            .right-panel {
+                padding: 32px 20px 48px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .social-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-card {
+                padding: 20px 16px;
+            }
+
+            .left-panel {
+                padding: 24px 20px 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- ── LEFT PANEL ── -->
+        <div class="left-panel">
+            <div class="ring2"></div>
+
+            <div class="books-art">
+                <div class="book-spine" style="width:22px;height:125px;background:rgba(74,144,226,0.65);"></div>
+                <div class="book-spine" style="width:17px;height:100px;background:rgba(92,184,92,0.55);"></div>
+                <div class="book-spine" style="width:26px;height:150px;background:rgba(243,156,18,0.55);"></div>
+                <div class="book-spine" style="width:19px;height:88px; background:rgba(74,144,226,0.45);"></div>
+                <div class="book-spine" style="width:24px;height:138px;background:rgba(231,76,60,0.45);"></div>
+            </div>
+
+            <!-- Logo -->
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                <span class="logo-text">Bibliora</span>
+            </div>
+
+            <!-- Hero -->
+            <div class="hero-copy">
+                <div class="hero-tag">
+                    <i class="fas fa-book-open" style="font-size:10px;"></i>
+                    Join 38,000+ readers
+                </div>
+                <h1 class="hero-title">
+                    Start your reading<br>
+                    journey <em>today.</em>
+                </h1>
+                <p class="hero-sub">
+                    Create your free account and get instant access to thousands of books, exclusive content, and
+                    powerful reading tools.
+                </p>
+            </div>
+
+            <!-- Perks -->
+            <ul class="perks-list">
+                <li class="perk-item">
+                    <div class="perk-icon" style="background:rgba(74,144,226,0.18);">📚</div>
+                    <div>
+                        <div class="perk-text-title">12,000+ Books Instantly</div>
+                        <div class="perk-text-sub">Fiction, science, history, tech & more — all free to browse</div>
+                    </div>
+                </li>
+                <li class="perk-item">
+                    <div class="perk-icon" style="background:rgba(92,184,92,0.18);">⬇️</div>
+                    <div>
+                        <div class="perk-text-title">Offline Reading</div>
+                        <div class="perk-text-sub">Download books and read anywhere, even without internet</div>
+                    </div>
+                </li>
+                <li class="perk-item">
+                    <div class="perk-icon" style="background:rgba(243,156,18,0.18);">🔖</div>
+                    <div>
+                        <div class="perk-text-title">Sync Across Devices</div>
+                        <div class="perk-text-sub">Your bookmarks and highlights follow you everywhere</div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Bottom social proof -->
+            <div class="bottom-note">
+                <div class="note-avatar-group">
+                    <div class="note-avatar" style="background:linear-gradient(135deg,#4a90e2,#357abd);">PR</div>
+                    <div class="note-avatar" style="background:linear-gradient(135deg,#5cb85c,#3a8a3a);">SK</div>
+                    <div class="note-avatar" style="background:linear-gradient(135deg,#f39c12,#c0790e);">AM</div>
+                    <div class="note-avatar" style="background:linear-gradient(135deg,#e74c3c,#a93226);">RD</div>
+                </div>
+                <div class="note-text"><strong>38,000+</strong> readers already joined — it's free!</div>
+            </div>
+        </div>
+
+        <!-- ── RIGHT PANEL ── -->
+        <div class="right-panel">
+            <div class="form-wrap">
+
+                <div class="form-heading">
+                    <h2 class="form-title">Create your account ✨</h2>
+                    <p class="form-subtitle">Free forever on the basic plan. No credit card needed.</p>
+                </div>
+
+                <!-- Msg box -->
+                <div class="msg-box" id="msgBox">
+                    <i class="fas fa-circle-exclamation"></i>
+                    <span id="msgText"></span>
+                </div>
+
+                <div class="form-card">
+                    <form id="signupForm" novalidate>
+
+                        <!-- First + Last name -->
+                        <div class="field-row">
+                            <div class="form-group">
+                                <label class="form-label" for="firstName">First Name</label>
+                                <div class="input-wrap">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" id="firstName" name="firstName" class="form-input"
+                                        placeholder="Haridas" autocomplete="given-name" required>
+                                    <i class="fas fa-check val-icon" id="vi-first"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="lastName">Last Name</label>
+                                <div class="input-wrap">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" id="lastName" name="lastName" class="form-input"
+                                        placeholder="Mahato" autocomplete="family-name" required>
+                                    <i class="fas fa-check val-icon" id="vi-last"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label class="form-label" for="email">Email address</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-envelope input-icon"></i>
+                                <input type="email" id="email" name="email" class="form-input"
+                                    placeholder="you@example.com" autocomplete="email" required>
+                                <i class="fas fa-check val-icon" id="vi-email"></i>
+                            </div>
+                            <div class="field-hint" id="hint-email"></div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label" for="password">Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="password" name="password" class="form-input"
+                                    placeholder="Create a strong password" autocomplete="new-password" required
+                                    style="padding-right: 38px;">
+                                <button type="button" class="toggle-pw" id="togglePw1">
+                                    <i class="fas fa-eye-slash" id="pwIcon1"></i>
+                                </button>
+                            </div>
+                            <!-- Strength bar -->
+                            <div class="strength-wrap" id="strengthWrap">
+                                <div class="strength-bar">
+                                    <div class="strength-fill" id="strengthFill"></div>
+                                </div>
+                                <div class="strength-label" id="strengthLabel">Enter a password</div>
+                            </div>
+                            <div class="field-hint" id="hint-pw"></div>
+                        </div>
+
+                        <!-- Confirm password -->
+                        <div class="form-group">
+                            <label class="form-label" for="confirmPassword">Confirm Password</label>
+                            <div class="input-wrap">
+                                <i class="fas fa-lock input-icon"></i>
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                                    placeholder="Repeat your password" autocomplete="new-password" required
+                                    style="padding-right: 38px;">
+                                <button type="button" class="toggle-pw" id="togglePw2">
+                                    <i class="fas fa-eye-slash" id="pwIcon2"></i>
+                                </button>
+                            </div>
+                            <div class="field-hint" id="hint-confirm"></div>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="terms-row">
+                            <input type="checkbox" id="agreeTerms" class="custom-check" required>
+                            <label for="agreeTerms" class="terms-label">
+                                I agree to Bibliora's <a href="#">Terms of Service</a> and <a href="#">Privacy
+                                    Policy</a>.
+                                You'll receive occasional updates about new books and features.
+                            </label>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <span class="btn-text"><i class="fas fa-user-plus"></i> &nbsp;Create Free Account</span>
+                            <div class="btn-spinner"></div>
+                        </button>
+
+                        <!-- Divider -->
+                        <div class="divider">
+                            <div class="divider-line"></div>
+                            <span class="divider-text">or sign up with</span>
+                            <div class="divider-line"></div>
+                        </div>
+
+                        <!-- Social -->
+                        <div class="social-row">
+                            <button type="button" class="btn-social" onclick="handleGoogle()">
+                                <svg width="15" height="15" viewBox="0 0 24 24">
+                                    <path fill="#4285F4"
+                                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                    <path fill="#34A853"
+                                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                    <path fill="#FBBC05"
+                                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+                                    <path fill="#EA4335"
+                                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                </svg>
+                                Google
+                            </button>
+                            <button type="button" class="btn-social" onclick="handleGithub()">
+                                <i class="fab fa-github" style="font-size:15px;"></i>
+                                GitHub
+                            </button>
+                        </div>
+
+                        <!-- Sign in -->
+                        <div class="signin-row">
+                            Already have an account?
+                            <a href="login.html" class="signin-link">Sign in →</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ── Password toggles ── */
+        function setupToggle(btnId, iconId, inputId) {
+            document.getElementById(btnId).addEventListener('click', function () {
+                const inp = document.getElementById(inputId);
+                const icon = document.getElementById(iconId);
+                const show = inp.type === 'password';
+                inp.type = show ? 'text' : 'password';
+                icon.className = show ? 'fas fa-eye' : 'fas fa-eye-slash';
+            });
+        }
+        setupToggle('togglePw1', 'pwIcon1', 'password');
+        setupToggle('togglePw2', 'pwIcon2', 'confirmPassword');
+
+        /* ── Message box ── */
+        function showMsg(text, type) {
+            const box = document.getElementById('msgBox');
+            const span = document.getElementById('msgText');
+            box.className = 'msg-box ' + type;
+            box.querySelector('i').className = type === 'error'
+                ? 'fas fa-circle-exclamation' : 'fas fa-circle-check';
+            span.textContent = text;
+        }
+        function hideMsg() { document.getElementById('msgBox').className = 'msg-box'; }
+
+        /* ── Hint helpers ── */
+        function setHint(id, text, state) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.className = 'field-hint show ' + state;
+        }
+        function clearHint(id) { document.getElementById(id).className = 'field-hint'; }
+
+        /* ── Val icon helpers ── */
+        function setValIcon(id, ok) {
+            const el = document.getElementById(id);
+            el.className = ok ? 'fas fa-check val-icon show-ok' : 'fas fa-times val-icon show-err';
+        }
+        function clearValIcon(id) { document.getElementById(id).className = 'fas fa-check val-icon'; }
+
+        /* ── Password strength ── */
+        function checkStrength(pw) {
+            let score = 0;
+            if (pw.length >= 8) score++;
+            if (/[A-Z]/.test(pw)) score++;
+            if (/[0-9]/.test(pw)) score++;
+            if (/[^A-Za-z0-9]/.test(pw)) score++;
+            return score;
+        }
+
+        const strengthColors = ['', '#e74c3c', '#f39c12', '#4a90e2', '#5cb85c'];
+        const strengthLabels = ['', 'Weak — add numbers & symbols', 'Fair — try adding uppercase', 'Good — almost there!', 'Strong password ✓'];
+
+        document.getElementById('password').addEventListener('input', function () {
+            const pw = this.value;
+            const wrap = document.getElementById('strengthWrap');
+            const fill = document.getElementById('strengthFill');
+            const label = document.getElementById('strengthLabel');
+
+            if (!pw) { wrap.classList.remove('show'); clearHint('hint-pw'); clearValIcon('vi-pw'); return; }
+            wrap.classList.add('show');
+
+            const score = checkStrength(pw);
+            fill.style.width = (score * 25) + '%';
+            fill.style.background = strengthColors[score] || '#e74c3c';
+            label.textContent = strengthLabels[score] || '';
+            label.style.color = strengthColors[score] || '#e74c3c';
+
+            // Validate confirm if already typed
+            const conf = document.getElementById('confirmPassword').value;
+            if (conf) checkConfirm(conf);
+        });
+
+        /* ── Confirm password live check ── */
+        function checkConfirm(val) {
+            const pw = document.getElementById('password').value;
+            if (!val) { clearHint('hint-confirm'); return; }
+            if (val === pw) {
+                setHint('hint-confirm', 'Passwords match ✓', 'ok');
+                document.getElementById('confirmPassword').classList.add('valid');
+                document.getElementById('confirmPassword').classList.remove('invalid');
+            } else {
+                setHint('hint-confirm', 'Passwords do not match', 'err');
+                document.getElementById('confirmPassword').classList.add('invalid');
+                document.getElementById('confirmPassword').classList.remove('valid');
+            }
+        }
+
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            checkConfirm(this.value);
+        });
+
+        /* ── Email live check ── */
+        document.getElementById('email').addEventListener('blur', function () {
+            const val = this.value.trim();
+            if (!val) { clearHint('hint-email'); clearValIcon('vi-email'); return; }
+            const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+            if (ok) {
+                clearHint('hint-email');
+                setValIcon('vi-email', true);
+                this.classList.add('valid'); this.classList.remove('invalid');
+            } else {
+                setHint('hint-email', 'Please enter a valid email address', 'err');
+                setValIcon('vi-email', false);
+                this.classList.add('invalid'); this.classList.remove('valid');
+            }
+        });
+
+        /* ── Name live checks ── */
+        ['firstName', 'lastName'].forEach(function (id, i) {
+            const viId = i === 0 ? 'vi-first' : 'vi-last';
+            document.getElementById(id).addEventListener('blur', function () {
+                if (this.value.trim().length >= 2) {
+                    setValIcon(viId, true);
+                    this.classList.add('valid'); this.classList.remove('invalid');
+                } else if (this.value.trim()) {
+                    setValIcon(viId, false);
+                    this.classList.add('invalid'); this.classList.remove('valid');
+                }
+            });
+        });
+
+        /* ── Form submit ── */
+        document.getElementById('signupForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideMsg();
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('agreeTerms').checked;
+            const btn = document.getElementById('submitBtn');
+
+            /* Basic validation */
+            if (!firstName || !lastName) { showMsg('Please enter your full name.', 'error'); return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg('Please enter a valid email address.', 'error'); return; }
+            if (checkStrength(password) < 2) { showMsg('Please choose a stronger password (min 8 chars, mix of letters & numbers).', 'error'); return; }
+            if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
+            if (!terms) { showMsg('Please accept the Terms of Service to continue.', 'error'); return; }
+
+            btn.classList.add('loading');
+
+            try {
+                // ── Supabase signup ──
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { first_name: firstName, last_name: lastName, full_name: `${firstName} ${lastName}` } }
+                });
+                if (error) throw error;
+                
+                // Auto-login after successful signup
+                if (data.user && typeof BiblioraAuth !== 'undefined') {
+                    BiblioraAuth.createSession({
+                        userId: data.user.id,
+                        userName: data.user.user_metadata?.full_name || `${firstName} ${lastName}`,
+                        userEmail: data.user.email,
+                        userRole: 'user'
+                    });
+                }
+
+                showMsg('Account created! Redirecting to your library…', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1800);
+            } catch (err) {
+                showMsg(err.message || 'Something went wrong. Please try again.', 'error');
+            } finally {
+                btn.classList.remove('loading');
+            }
+        });
+
+        /* ── Social auth stubs ── */
+        async function handleGoogle() {
+            try {
+                // await supabaseClient.auth.signInWithOAuth({ provider: 'google' });
+                showMsg('Google sign-up coming soon!', 'success');
+            } catch (e) { showMsg(e.message, 'error'); }
+        }
+
+        async function handleGithub() {
+            try {
+                // await supabaseClient.auth.signInWithOAuth({ provider: 'github' });
+                showMsg('GitHub sign-up coming soon!', 'success');
+            } catch (e) { showMsg(e.message, 'error'); }
+        }
+    </script>
+
+</body>
+
+</html>

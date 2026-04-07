@@ -1,0 +1,239 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: #f5f7fb;
+    color: #333;
+}
+
+/* =========================
+   VARIABLES
+========================= */
+:root {
+    --primary-color: #4f6ef7;
+    --danger-color: #ef4444;
+    --bg-color: #f5f7fb;
+    --text-color: #333;
+    --status-active-bg: #e6f7f0;
+    --status-active-color: #10b981;
+    --status-inactive-bg: #fdecec;
+    --status-inactive-color: #ef4444;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.sidebar {
+    width: 260px;
+    background: #ffffff;
+    border-right: 1px solid #eee;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.logo {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo h1 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo p {
+    font-size: 12px;
+    color: #777;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #555;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s, border-left 0.3s;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav a i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-nav a:hover {
+    background: #f0f4ff;
+}
+
+.sidebar-nav a.active {
+    background: #eef2ff;
+    color: var(--primary-color);
+    border-left: 3px solid var(--primary-color);
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main-content {
+    margin-left: 260px;
+    padding: 25px;
+    flex: 1;
+}
+
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 22px;
+}
+
+.header p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* =========================
+   CONTENT CARD
+========================= */
+.content-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* =========================
+   USERS TABLE
+========================= */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.users-table th,
+.users-table td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.users-table th {
+    background: #f8f9fc;
+    color: #555;
+    font-weight: 600;
+}
+
+.users-table tbody tr:hover {
+    background: #f3f6fb;
+}
+
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+}
+
+.status.active {
+    background: var(--status-active-bg);
+    color: var(--status-active-color);
+}
+
+.status.inactive {
+    background: var(--status-inactive-bg);
+    color: var(--status-inactive-color);
+}
+
+/* =========================
+   USER ACTION BUTTONS
+========================= */
+.user-actions button {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.user-actions .edit {
+    background: var(--primary-color);
+    color: white;
+}
+
+.user-actions .delete {
+    background: var(--danger-color);
+    color: white;
+}
+
+.user-actions button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .users-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .users-table th,
+    .users-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+}

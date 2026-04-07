@@ -1,0 +1,180 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f4f6fb;
+  color: #333;
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: #1e2a3a;
+  color: #fff;
+  padding: 20px;
+}
+
+.sidebar .logo {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.sidebar li:hover,
+.sidebar li.active {
+  background: #2f80ed;
+}
+
+/* MAIN */
+.main {
+  flex: 1;
+  padding: 20px 30px;
+}
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.topbar input {
+  width: 300px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar {
+  background: #2f80ed;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.card p {
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+.highlight {
+  background: #eef4ff;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.large {
+  grid-column: span 2;
+}
+
+/* LISTS */
+.requests li,
+.top-books li,
+.notifications li {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.approve {
+  background: #2f80ed;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* PROGRESS */
+.progress {
+  background: #ddd;
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  width: 56%;
+  height: 100%;
+  background: #2f80ed;
+  border-radius: 5px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .large {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .topbar input {
+    width: 100%;
+  }
+}
