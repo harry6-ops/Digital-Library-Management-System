@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblion - Notifications</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #2c3e50;
+            --primary-light: #34495e;
+            --accent-blue: #4a90e2;
+            --accent-green: #5cb85c;
+            --accent-orange: #f39c12;
+            --accent-red: #e74c3c;
+            --accent-yellow: #ffd54f;
+            --bg-light: #f5f7fa;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #e1e8ed;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255, 255, 255, 0.8);
+            border-left: 3px solid transparent;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(74, 144, 226, 0.15);
+            border-left-color: #4a90e2;
+            color: white;
+        }
+
+        .nav-badge {
+            position: absolute;
+            right: 20px;
+            background: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .dark-mode-toggle {
+            margin: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #4a90e2;
+        }
+
+        .toggle-switch.active::after {
+            left: 23px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .topbar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 44px;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #3d5166;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: #445968;
+            color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 32px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Search and Mark Read Section */
+        .search-mark-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .notification-search {
+            flex: 1;
+            position: relative;
+        }
+
+        .notification-search-input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .notification-search-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .notification-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.5;
+        }
+
+        .btn-mark-read {
+            padding: 10px 24px;
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-mark-read:hover {
+            background: var(--bg-light);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 8px 20px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .filter-tab:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .filter-tab.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            padding: 8px 40px 8px 20px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .dropdown-btn:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            min-width: 180px;
+            display: none;
+            z-index: 10;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-light);
+        }
+
+        .entries-select {
+            padding: 8px 40px 8px 20px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237f8c8d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        /* Notifications List */
+        .notifications-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .notifications-header {
+            display: grid;
+            grid-template-columns: 1fr 150px 80px;
+            padding: 16px 24px;
+            background: var(--bg-light);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .notification-item {
+            display: grid;
+            grid-template-columns: 1fr 150px 80px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .notification-item:hover {
+            background: var(--bg-light);
+        }
+
+        .notification-item.unread {
+            background: #f8f9ff;
+        }
+
+        .notification-content {
+            display: flex;
+            gap: 16px;
+        }
+
+        .notification-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .notification-details {
+            flex: 1;
+        }
+
+        .notification-header-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .notification-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .notification-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .notification-badge.admin {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .notification-badge.alert {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .notification-badge.request {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .notification-badge.notification {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+
+        .notification-badge.upload {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .notification-badge.member {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .notification-badge.unread-badge {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .notification-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .notification-link {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .notification-date {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .notification-bell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+
+        .notification-bell:hover {
+            opacity: 1;
+            color: var(--accent-blue);
+        }
+
+        /* Pagination */
+        .pagination {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            border: 2px solid var(--border-color);
+            background: white;
+            color: var(--text-primary);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .page-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .page-nav {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .page-nav:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        /* Unread Counter */
+        .unread-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .notifications-header {
+                grid-template-columns: 1fr 120px 60px;
+            }
+
+            .notification-item {
+                grid-template-columns: 1fr 120px 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .search-mark-section {
+                flex-direction: column;
+            }
+
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .notifications-header {
+                display: none;
+            }
+
+            .notification-item {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .notification-date {
+                justify-content: flex-start;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">📚</div>
+                <div class="logo-text">Bibliora</div>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard-admin.html" class="nav-item">
+                    <span>📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-books.html" class="nav-item">
+                    <span>📚</span>
+                    <span>Books</span>
+                </a>
+                <a href="admin-uploads.html" class="nav-item">
+                    <span>⬆️</span>
+                    <span>Uploads</span>
+                </a>
+                <a href="admin-categories.html" class="nav-item">
+                    <span>🏷️</span>
+                    <span>Categories</span>
+                </a>
+                <a href="admin-user.html" class="nav-item">
+                    <span>👥</span>
+                    <span>Users</span>
+                </a>
+                <a href="admin-request.html" class="nav-item">
+                    <span>📝</span>
+                    <span>Requests</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <span>📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="admin-notification.html" class="nav-item active">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                    <span class="nav-badge">8</span>
+                </a>
+                <a href="admin-settings.html" class="nav-item">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="topbar">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search admin">
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-button">🔔</button>
+                    <button class="icon-button">💬</button>
+                    <div class="user-avatar">AU</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title">Notifications</h1>
+                    <p class="page-subtitle">Analyze and monitor key statistics and performance.</p>
+                </div>
+
+                <div class="search-mark-section">
+                    <div class="notification-search">
+                        <span class="notification-search-icon">🔍</span>
+                        <input type="text" class="notification-search-input" id="notificationSearch"
+                            placeholder="Search notifications">
+                    </div>
+                    <button class="btn-mark-read" onclick="markAllAsRead()">Mark All as Read</button>
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterNotifications('all')">All</button>
+                    <button class="filter-tab" onclick="filterNotifications('unread')">Unread</button>
+                    <button class="filter-tab" onclick="filterNotifications('users')">All users</button>
+                    <button class="filter-tab" onclick="filterNotifications('dates')">All dates</button>
+                    <div class="filter-dropdown">
+                        <select class="dropdown-btn" id="timeFilter">
+                            <option>This Month</option>
+                            <option>Last Month</option>
+                            <option>Last 3 Months</option>
+                            <option>This Year</option>
+                            <option>Last Year</option>
+                            <option>Custom Range</option>
+                        </select>
+                    </div>
+                    <select class="entries-select">
+                        <option>Show 10 entries</option>
+                        <option>Show 25 entries</option>
+                        <option>Show 50 entries</option>
+                        <option>Show 100 entries</option>
+                    </select>
+                </div>
+
+                <div class="notifications-container">
+                    <div class="notifications-header">
+                        <div>Notification</div>
+                        <div>Date</div>
+                        <div style="text-align: center;">🔔</div>
+                    </div>
+                    <div id="notificationsList">
+                        <!-- Notifications will be populated by JavaScript -->
+                    </div>
+                    <div class="pagination">
+                        <div class="pagination-info">Showing 1 to 8 of 55 entries</div>
+                        <div class="pagination-controls">
+                            <button class="page-nav">‹</button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn">4</button>
+                            <button class="page-btn">...</button>
+                            <button class="page-nav">›</button>
+                            <button class="page-btn">Last</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unread-counter">
+                    🔔 Unread: <span id="unreadCount">8</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Include Supabase and LibraryOS dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/api.js"></script>
+    <script>
+        let allNotifications = [];
+        let filteredNotifications = [];
+        let currentPage = 1;
+        let itemsPerPage = 8;
+        let currentFilter = 'all';
+
+        async function renderNotifications() {
+            const container = document.getElementById('notificationsList');
+            container.innerHTML = '<div style="text-align:center; padding: 20px;">Loading...</div>';
+
+            try {
+                const supabaseClientObj = window.supabaseClient || window.supabase;
+                const { data: notifications, error } = await supabaseClientObj
+                    .from('notifications')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error && error.code !== 'PGRST205' && error.code !== '42P01') throw error; // Ignore missing table error
+
+                allNotifications = notifications || [];
+                applyFilters();
+            } catch (err) {
+                console.error("Failed to fetch notifications:", err);
+                container.innerHTML = '<div style="text-align:center; padding: 20px; color:red;">No notifications found or table missing.</div>';
+            }
+        }
+
+        function applyFilters() {
+            const searchEl = document.getElementById('notificationSearch');
+            const searchTerm = searchEl ? searchEl.value.toLowerCase() : '';
+            
+            filteredNotifications = allNotifications.filter(n => {
+                const nameStr = (n.name || n.user_name || '').toLowerCase();
+                const msgStr = (n.message || '').toLowerCase();
+                const matchesSearch = !searchTerm || nameStr.includes(searchTerm) || msgStr.includes(searchTerm);
+                
+                const isUnread = n.unread; // assuming unread is a boolean
+                const matchesTab = currentFilter === 'all' || 
+                                   (currentFilter === 'unread' && isUnread);
+                
+                return matchesSearch && matchesTab;
+            });
+            
+            currentPage = 1;
+            displayNotifications();
+        }
+
+        function displayNotifications() {
+            const container = document.getElementById('notificationsList');
+            
+            if (!filteredNotifications || filteredNotifications.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding: 20px;">No notifications found.</div>';
+                updatePagination(0, 0);
+                updateUnreadCount();
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const notifsToShow = filteredNotifications.slice(startIndex, endIndex);
+
+            container.innerHTML = notifsToShow.map((notification) => {
+                const unreadClass = notification.unread ? 'unread' : '';
+                const img = notification.img || notification.user_avatar || `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`;
+                const name = notification.name || notification.user_name || 'Admin UI';
+                const role = notification.role || 'System';
+                const badge = notification.badge || 'Notification';
+                const message = notification.message || 'No description available.';
+                
+                const dateObj = notification.created_at ? new Date(notification.created_at) : new Date();
+                const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <div class="notification-item ${unreadClass}">
+                        <div class="notification-content">
+                            <img src="${img}" alt="${name}" class="notification-avatar">
+                            <div class="notification-details">
+                                <div class="notification-header-row">
+                                    <span class="notification-name">${name}</span>
+                                    <span class="notification-badge ${badge.toLowerCase()}">${badge}</span>
+                                    ${notification.unread ? '<span class="notification-badge unread-badge">Unread</span>' : ''}
+                                </div>
+                                <div class="notification-role">${role}</div>
+                                <div class="notification-message">${message}</div>
+                            </div>
+                        </div>
+                        <div class="notification-date">${formattedDate}</div>
+                        <div class="notification-bell" onclick="toggleRead('${notification.id}', ${notification.unread})">🔔</div>
+                    </div>
+                `;
+            }).join('');
+            
+            const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage);
+            updatePagination(filteredNotifications.length, totalPages);
+            updateUnreadCount();
+        }
+
+        async function toggleRead(id, currentStatus) {
+            // Check if dummy ID
+            if (id === 'undefined') return;
+
+            try {
+                const supabaseClientObj = window.supabaseClient || window.supabase;
+                const newStatus = !currentStatus;
+                
+                const { error } = await supabaseClientObj
+                    .from('notifications')
+                    .update({ unread: newStatus })
+                    .eq('id', id);
+                    
+                if (error) throw error;
+                
+                // Update local state
+                const notif = allNotifications.find(n => n.id === id);
+                if (notif) notif.unread = newStatus;
+                
+                applyFilters();
+            } catch (err) {
+                console.error("Error updating notification status:", err);
+            }
+        }
+
+        async function markAllAsRead() {
+            try {
+                const supabaseClientObj = window.supabaseClient || window.supabase;
+                const unreadItems = allNotifications.filter(n => n.unread && n.id);
+                
+                if (unreadItems.length === 0) return;
+                
+                for (const item of unreadItems) {
+                    await supabaseClientObj.from('notifications').update({ unread: false }).eq('id', item.id);
+                }
+                
+                allNotifications.forEach(n => n.unread = false);
+                applyFilters();
+            } catch (err) {
+                console.error("Error marking all as read:", err);
+            }
+        }
+
+        function updateUnreadCount() {
+            const count = allNotifications.filter(n => n.unread).length;
+            const countSpan = document.getElementById('unreadCount');
+            if (countSpan) countSpan.textContent = count;
+            
+            const navBadge = document.querySelector('.nav-badge');
+            if (navBadge) {
+                navBadge.textContent = count;
+                navBadge.style.display = count > 0 ? 'block' : 'none';
+            }
+        }
+
+        function filterNotifications(type) {
+            currentFilter = type;
+            const tabs = document.querySelectorAll('.filter-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            if(event && event.target) {
+                event.target.classList.add('active');
+            }
+            
+            applyFilters();
+        }
+
+        function updatePagination(totalItems, totalPages) {
+            const paginationInfo = document.querySelector('.pagination-info');
+            const paginationControls = document.querySelector('.pagination-controls');
+            
+            if (!paginationInfo || !paginationControls) return;
+            
+            if (totalItems === 0) {
+                paginationInfo.textContent = 'Showing 0 entries';
+                paginationControls.innerHTML = '';
+                return;
+            }
+            
+            const start = (currentPage - 1) * itemsPerPage + 1;
+            const end = Math.min(currentPage * itemsPerPage, totalItems);
+            paginationInfo.textContent = `Showing ${start} to ${end} of ${totalItems} entries`;
+            
+            let controlsHTML = '';
+            controlsHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>`;
+            
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    controlsHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    controlsHTML += `<button class="page-btn" disabled>...</button>`;
+                }
+            }
+            
+            controlsHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>`;
+            
+            paginationControls.innerHTML = controlsHTML;
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            displayNotifications();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function toggleDarkMode(event) {
+            event.stopPropagation();
+            event.target.classList.toggle('active');
+        }
+
+        function logout() {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userRole");
+            window.location.href = "admin-login.html";
+        }
+
+        // Event listeners
+        const searchInput = document.getElementById('notificationSearch');
+        if (searchInput) {
+            searchInput.addEventListener('input', applyFilters);
+        }
+
+        const entriesSelects = document.querySelectorAll('.entries-select');
+        entriesSelects.forEach(select => {
+            select.addEventListener('change', (e) => {
+                // Parse correctly matching "Show XX entries"
+                const match = e.target.value.match(/(\d+)/);
+                if (match) {
+                    itemsPerPage = parseInt(match[1], 10);
+                    currentPage = 1;
+                    applyFilters();
+                }
+            });
+        });
+
+        // Initialize
+        renderNotifications();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+library-management-system/
+├── backend/
+│   ├── config.php
+│   ├── login.php
+│   ├── books.php
+│   ├── dashboard.php
+│   ├── borrow.php
+│   ├── membership.php
+│   └── payments.php
+├── index.html
+├── login.html
+├── dashboard.html
+├── books.html
+├── membership.html
+├── payment.html
+├── css/
+│   ├── style.css
+│   ├── login.css
+│   └── books.css
+├── js/
+│   ├── api.js          
+│   ├── script.js
+│   ├── login.js        # UPDATED
+│   ├── dashboard.js    # UPDATED
+│   ├── books.js        # UPDATED
+│   ├── membership.js
+│   └── payment.js
+├── sql/
+│   └── database.sql
+└── assets/
+    ├── images/
+    └── icons/

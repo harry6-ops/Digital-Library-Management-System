@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblion - Admin Settings</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #2c3e50;
+            --primary-light: #34495e;
+            --accent-blue: #4a90e2;
+            --accent-green: #5cb85c;
+            --accent-orange: #f39c12;
+            --accent-red: #e74c3c;
+            --accent-purple: #667eea;
+            --bg-light: #f5f7fa;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #e1e8ed;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255, 255, 255, 0.8);
+            border-left: 3px solid transparent;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(74, 144, 226, 0.15);
+            border-left-color: #4a90e2;
+            color: white;
+        }
+
+        .nav-badge {
+            position: absolute;
+            right: 20px;
+            background: var(--accent-red);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .dark-mode-toggle {
+            margin: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dark-mode-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #4a90e2;
+        }
+
+        .toggle-switch.active::after {
+            left: 23px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .topbar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 44px;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #3d5166;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: #445968;
+            color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 32px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 12px 12px 0 0;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border-color);
+            padding: 0 24px;
+        }
+
+        .tab {
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--accent-blue);
+            background: rgba(74, 144, 226, 0.05);
+        }
+
+        .tab.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+            background: transparent;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 24px;
+        }
+
+        .card.standalone {
+            border-radius: 12px;
+            margin-top: 24px;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* Account Form */
+        .account-form {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .avatar-section {
+            text-align: center;
+        }
+
+        .avatar-preview {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-placeholder svg {
+            width: 80px;
+            height: 80px;
+        }
+
+        .change-avatar-btn {
+            padding: 10px 24px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .change-avatar-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: rgba(74, 144, 226, 0.05);
+        }
+
+        .form-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Source Sans 3', sans-serif;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        }
+
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            opacity: 0.5;
+            transition: all 0.2s;
+            padding: 4px;
+        }
+
+        .password-toggle:hover {
+            opacity: 1;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .save-btn {
+            padding: 14px 40px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: fit-content;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .save-btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 144, 226, 0.4);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Session Management Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-light);
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 20px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: all 0.2s;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent-blue);
+            color: white;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .session-detail {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .device-info {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .logout-btn {
+            padding: 8px 20px;
+            background: transparent;
+            color: var(--accent-red);
+            border: 2px solid var(--accent-red);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--accent-red);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Table Footer */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+        }
+
+        .page-btn {
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+
+        .page-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .page-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .unread-btn {
+            padding: 8px 20px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .unread-btn:hover {
+            background: #357abd;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            right: 32px;
+            background: var(--accent-green);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .success-message.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .account-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 16px 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                padding: 0 16px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .table-wrapper {
+                overflow-x: scroll;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .pagination-controls {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .avatar-preview {
+                width: 120px;
+                height: 120px;
+            }
+
+            .form-group input {
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">📚</div>
+                <div class="logo-text">Bibliora</div>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard-admin.html" class="nav-item">
+                    <span>📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-books.html" class="nav-item">
+                    <span>📚</span>
+                    <span>Books</span>
+                </a>
+                <a href="admin-uploads.html" class="nav-item">
+                    <span>⬆️</span>
+                    <span>Uploads</span>
+                </a>
+                <a href="admin-categories.html" class="nav-item">
+                    <span>🏷️</span>
+                    <span>Categories</span>
+                </a>
+                <a href="admin-user.html" class="nav-item">
+                    <span>👥</span>
+                    <span>Users</span>
+                </a>
+                <a href="admin-request.html" class="nav-item">
+                    <span>📋</span>
+                    <span>Requests</span>
+                </a>
+                <a href="admin-reports.html" class="nav-item">
+                    <span>📈</span>
+                    <span>Reports</span>
+                </a>
+                <a href="admin-notification.html" class="nav-item">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                    <span class="nav-badge">2</span>
+                </a>
+                <a href="admin-settings.html" class="nav-item active">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="topbar">
+                <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search admin">
+                </div>
+                <div class="topbar-actions">
+                    <button class="icon-button">🔔</button>
+                    <button class="icon-button">⋯</button>
+                    <div class="user-avatar">JD</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title">Admin Settings</h1>
+                    <p class="page-subtitle">Manage your account settings, preferences and security options.</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab(event, 'account')">Account</button>
+                        <button class="tab" onclick="switchTab(event, 'profile')">Profile</button>
+                        <button class="tab" onclick="switchTab(event, 'security')">Security</button>
+                        <button class="tab" onclick="switchTab(event, 'preferences')">Preferences</button>
+                    </div>
+                </div>
+
+                <!-- Account Settings Card -->
+                <div class="card">
+                    <h2 class="card-title">Account Settings</h2>
+                    <div class="account-form">
+                        <div class="avatar-section">
+                            <div class="avatar-preview" id="avatarPreview">
+                                <div class="avatar-placeholder">
+                                    <svg width="80" height="80" viewBox="0 0 80 80">
+                                        <circle cx="40" cy="30" r="15" fill="#fff" />
+                                        <path d="M15,70 Q15,50 40,50 Q65,50 65,70" fill="#fff" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                            <button class="change-avatar-btn"
+                                onclick="document.getElementById('avatarInput').click()">Change Avatar</button>
+                        </div>
+
+                        <div class="form-fields">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" value="John Doe">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="johndoe@email.com">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" value="johndoe">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="password" value="••••••••">
+                                    <button class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="confirmPassword" value="••••••••">
+                                    <button class="password-toggle"
+                                        onclick="togglePassword('confirmPassword')">👁️</button>
+                                </div>
+                                <span class="form-hint">Minimum 8 characters</span>
+                            </div>
+
+                            <button class="save-btn" onclick="saveChanges()">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Management Card -->
+                <div class="card standalone">
+                    <h2 class="card-title">Session Management</h2>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Location</th>
+                                    <th>Device</th>
+                                    <th>IP Address</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessionsTable">
+                                <!-- Sessions will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="table-footer">
+                        <div class="pagination-info">Showing 1 to 8 of 55 entries</div>
+                        <div class="pagination-controls">
+                            <div class="pagination">
+                                <button class="page-btn active">1</button>
+                                <button class="page-btn">2</button>
+                                <button class="page-btn">3</button>
+                                <button class="page-btn">4</button>
+                                <button class="page-btn">›</button>
+                            </div>
+                            <button class="unread-btn">
+                                ⬇️ Unread: 8
+                            </button>
+                            <button class="icon-button"
+                                style="background: white; border: 2px solid var(--border-color); color: var(--text-primary);">⋯</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        <span style="font-size: 20px;">✓</span>
+        <span>Settings saved successfully!</span>
+    </div>
+
+    <script>
+        const sessionsData = [
+            {
+                date: 'Current',
+                location: 'New York, NY, USA',
+                locationDetail: '1a.3025, 25025',
+                device: 'Chrome',
+                deviceDetail: 'on Windows',
+                ip: '192.168.1.10',
+                isCurrent: true
+            },
+            {
+                date: 'April 23, 2024',
+                dateDetail: 'Current',
+                location: 'Chicago, IL, USA',
+                locationDetail: '13.7aps, 25025',
+                device: 'Chrome',
+                deviceDetail: 'on Android',
+                ip: '192.168.1.25',
+                isCurrent: false
+            },
+            {
+                date: 'April 20, 2024',
+                dateDetail: 'Current',
+                location: 'London, UK',
+                locationDetail: '12.sops, 4.1168',
+                device: 'Firefox',
+                deviceDetail: 'on MacOS',
+                ip: '185.212.13.110',
+                isCurrent: false
+            },
+            {
+                date: 'April 20, 2024',
+                dateDetail: 'Current',
+                location: 'London, UK',
+                locationDetail: '1a.7ej18, 25024',
+                device: '',
+                deviceDetail: '',
+                ip: '185.212.13.110',
+                isCurrent: false
+            }
+        ];
+
+        function renderSessions() {
+            const table = document.getElementById('sessionsTable');
+            table.innerHTML = sessionsData.map((session, index) => `
+                <tr>
+                    <td>
+                        ${session.isCurrent ? '<span class="status-badge">Current</span>' : `
+                            <div>${session.date}</div>
+                            ${session.dateDetail ? `<div class="session-detail">${session.dateDetail}</div>` : ''}
+                        `}
+                    </td>
+                    <td>
+                        <div>${session.location}</div>
+                        <div class="session-detail">${session.locationDetail}</div>
+                    </td>
+                    <td>
+                        ${session.device ? `
+                            <div class="device-info">${session.device}</div>
+                            <div class="session-detail">${session.deviceDetail}</div>
+                        ` : ''}
+                    </td>
+                    <td>${session.ip}</td>
+                    <td style="text-align: center;">
+                        <button class="logout-btn" onclick="logoutSession(${index})">Log Out</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function logoutSession(index) {
+            if (confirm('Are you sure you want to log out this session?')) {
+                sessionsData.splice(index, 1);
+                renderSessions();
+                showSuccessMessage('Session logged out successfully!');
+            }
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+
+        function saveChanges() {
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!fullName || !email || !username) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            if (password.length < 8 && password !== '••••••••') {
+                alert('Password must be at least 8 characters long!');
+                return;
+            }
+
+            // Show success message
+            showSuccessMessage('Settings saved successfully!');
+
+            console.log('Saved data:', { fullName, email, username });
+        }
+
+        function showSuccessMessage(message) {
+            const msgElement = document.getElementById('successMessage');
+            msgElement.querySelector('span:last-child').textContent = message;
+            msgElement.classList.add('show');
+
+            setTimeout(() => {
+                msgElement.classList.remove('show');
+            }, 3000);
+        }
+
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // In a real application, you would load different content here
+            console.log('Switched to tab:', tabName);
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function toggleDarkMode(event) {
+            event.stopPropagation();
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.classList.toggle('active');
+            // In a real application, you would toggle dark mode styles here
+        }
+
+        function logout() {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userRole");
+            window.location.href = "admin-login.html";
+        }
+
+        // Avatar upload
+        document.getElementById('avatarInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const avatarPreview = document.getElementById('avatarPreview');
+                    avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Avatar">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Pagination
+        document.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                if (!this.textContent.includes('›')) {
+                    document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize
+        renderSessions();
+    </script>
+</body>
+
+</html>
